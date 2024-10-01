@@ -8,7 +8,7 @@ export default function Home() {
 
       <div>
         Our vision for
-        <b> Math Magicians,</b>
+        <b> Math Magicians, </b>
         fuelled by our Purpose, is to be the most trusted and relevant professional services
         business in the world - one that attracts the best talent and combines the most innovative
         technologies, to help organisations build trust with their stakeholders and deliver
