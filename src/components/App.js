@@ -19,9 +19,7 @@ const App = () => {
     } else if (newDigit === '+/-') {
       setNext(calResult.next);
     } else if (newDigit === '.') {
-      setNext((prevState) => (
-        prevState.includes('.') ? prevState : prevState + newDigit
-      ));
+      setNext((prevState) => (prevState.includes('.') ? prevState : prevState + newDigit));
     } else if (newDigit === '+' || newDigit === '-' || newDigit === 'X' || newDigit === '÷') {
       setNext(calResult.next);
       setTotal(calResult.total);
@@ -29,9 +27,7 @@ const App = () => {
     } else if (newDigit === '=' && dataObject.next && dataObject.total) {
       setNext(calResult.next);
     } else if (newDigit.match(numbers)) {
-      setNext((prevState) => (
-        prevState === '0' ? newDigit : prevState + newDigit
-      ));
+      setNext((prevState) => (prevState === '0' ? newDigit : prevState + newDigit));
     }
   };
 

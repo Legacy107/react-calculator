@@ -25,6 +25,7 @@
 [Live Demo Link](https://react-calculator-sarvar.herokuapp.com/)
 
 ## Testing
+
 Calculator operations has been tested in various scenarious with Jest Testing Framework.
 Also, all React components have been tested with Snapshot testing.
 
@@ -32,20 +33,21 @@ Also, all React components have been tested with Snapshot testing.
   <img src="screenshots/testing_02.png?raw=true" width="90%" height="auto"/>
 </div>
 
-
 ## Getting Started
 
 To get a local copy up and running follow these simple example steps.
 
 ### Setup
+
     Step 1: git clone https://github.com/SarvarKh/react-calculator.git
-    
-    
+
+
     Step 2 - navigate to the cloned directory:
     cd react-calculator
 
     Step 3 - run the app in development mode:
     npm start
+
 Last step will open http://localhost:3000 to view it in the browser.
 
 ## Authors
