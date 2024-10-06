@@ -12,10 +12,14 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "test:ci": "CI=true react-scripts test",
+    "test:e2e": "playwright test",
+    "test:e2e-ui": "playwright test --ui",
+    "test:e2e-ci": "CI=true playwright test",
+    "test:gen": "playwright codegen",
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "format:check": "prettier --check .",
@@ -44,6 +48,13 @@
     "@babel/eslint-parser": "^7.14.7",
     "@babel/plugin-syntax-jsx": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
+    "@estruyf/github-actions-reporter": "^1.9.2",
+    "@playwright/test": "^1.47.2",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/node": "^22.7.4",
+    "dotenv": "^16.4.5",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.23.4",
@@ -56,9 +67,9 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^21.0.0",
     "stylelint-csstree-validator": "^1.9.0",
-    "stylelint-scss": "^3.19.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10"
+    "stylelint-scss": "^3.19.0"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
