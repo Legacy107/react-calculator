@@ -1,18 +1,14 @@
 // @ts-check
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig, devices } from '@playwright/test';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import dotenv from 'dotenv';
-import path from 'path';
-
-dotenv.config({ path: path.resolve(__dirname, '.env.test') });
+const { defineConfig, devices } = require('@playwright/test');
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// const path = require('path');
-// require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+const path = require('path');
+// eslint-disable-next-line import/no-extraneous-dependencies
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * @see https://playwright.dev/docs/test-configuration

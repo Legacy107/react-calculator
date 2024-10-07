@@ -4,7 +4,7 @@ import ButtonPanel from './ButtonPanel';
 import calculate from '../logic/calculate';
 import * as styles from '../style/components.module.css';
 
-const App = () => {
+function App() {
   const [total, setTotal] = useState(null);
   const [next, setNext] = useState('0');
   const [operation, setOperation] = useState(null);
@@ -40,6 +40,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;

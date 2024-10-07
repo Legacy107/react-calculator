@@ -18,11 +18,9 @@ export default function Button(props) {
     return result;
   };
   return (
-    <>
-      <button type="button" onClick={() => parentHandleState(name)} className={getClass(name)}>
-        {name}
-      </button>
-    </>
+    <button type="button" onClick={() => parentHandleState(name)} className={getClass(name)}>
+      {name}
+    </button>
   );
 }
 
