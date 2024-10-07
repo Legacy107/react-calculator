@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('has title', async ({ page }) => {
-  await expect(page.getByRole('heading', { name: 'Let\'s do some math!' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: "Let's do some math!" })).toBeVisible();
 });
 
 test('can do calculations', async ({ page }) => {
