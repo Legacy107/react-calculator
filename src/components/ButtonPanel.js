@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
-import * as styles from '../style/components.module.css';
+import styles from '../style/components.module.css';
 
 export default function ButtonPanel(props) {
   const { grantParentHandleState } = props;

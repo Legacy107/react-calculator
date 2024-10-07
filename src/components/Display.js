@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as styles from '../style/components.module.css';
+import styles from '../style/components.module.css';
 
 export default function Display(props) {
   const { status } = props;
