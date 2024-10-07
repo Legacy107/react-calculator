@@ -23,15 +23,15 @@ it('should render a Quote', () => {
   });
 
   expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
-    "<div>
+    "<div class=\\"calContainer\\">
       <h3>Let's do some math!</h3>
-      <div>
-        <div>0</div>
-        <div><button type=\\"button\\">AC</button><button type=\\"button\\">+/-</button><button type=\\"button\\">%</button><button type=\\"button\\">÷</button></div>
-        <div><button type=\\"button\\">7</button><button type=\\"button\\">8</button><button type=\\"button\\">9</button><button type=\\"button\\">X</button></div>
-        <div><button type=\\"button\\">4</button><button type=\\"button\\">5</button><button type=\\"button\\">6</button><button type=\\"button\\">-</button></div>
-        <div><button type=\\"button\\">1</button><button type=\\"button\\">2</button><button type=\\"button\\">3</button><button type=\\"button\\">+</button></div>
-        <div><button type=\\"button\\">0</button><button type=\\"button\\">.</button><button type=\\"button\\">=</button></div>
+      <div class=\\"calculator\\">
+        <div class=\\"display\\">0</div>
+        <div class=\\"row\\"><button type=\\"button\\" class=\\"btn\\">AC</button><button type=\\"button\\" class=\\"btn\\">+/-</button><button type=\\"button\\" class=\\"btn\\">%</button><button type=\\"button\\" class=\\"btnOperators\\">÷</button></div>
+        <div class=\\"row\\"><button type=\\"button\\" class=\\"btn\\">7</button><button type=\\"button\\" class=\\"btn\\">8</button><button type=\\"button\\" class=\\"btn\\">9</button><button type=\\"button\\" class=\\"btnOperators\\">X</button></div>
+        <div class=\\"row\\"><button type=\\"button\\" class=\\"btn\\">4</button><button type=\\"button\\" class=\\"btn\\">5</button><button type=\\"button\\" class=\\"btn\\">6</button><button type=\\"button\\" class=\\"btnOperators\\">-</button></div>
+        <div class=\\"row\\"><button type=\\"button\\" class=\\"btn\\">1</button><button type=\\"button\\" class=\\"btn\\">2</button><button type=\\"button\\" class=\\"btn\\">3</button><button type=\\"button\\" class=\\"btnOperators\\">+</button></div>
+        <div class=\\"row\\"><button type=\\"button\\" class=\\"btnZero\\">0</button><button type=\\"button\\" class=\\"btn\\">.</button><button type=\\"button\\" class=\\"btnOperators\\">=</button></div>
       </div>
     </div>"
   `);

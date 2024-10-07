@@ -23,7 +23,7 @@ it('should render a Quote', () => {
   });
 
   expect(pretty(container.innerHTML)).toMatchInlineSnapshot(`
-    "<div>
+    "<div class=\\"main\\">
       <div>Mathematics is not about numbers, equations, computations, or algorithms: it is about understanding. –William Paul Thurston</div>
     </div>"
   `);
