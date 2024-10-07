@@ -5,7 +5,7 @@ import App from './components/App';
 import Quote from './components/Quote';
 import Error from './Error';
 import Navbar from './components/Navbar';
-import * as styles from './style/components.module.css';
+import styles from './style/components.module.css';
 
 function Routes() {
   return (
