@@ -4,7 +4,7 @@ import styles from '../style/components.module.css';
 export default function Home() {
   return (
     <div className={styles.main}>
-      <h3>Welcome to our page!</h3>
+      <h3>Welcome to our page 123!</h3>
 
       <div>
         Our vision for
