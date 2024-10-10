@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 3000
+RUN yarn build
 
-CMD [ "yarn", "start" ]
+EXPOSE 80
+
+CMD [ "yarn", "serve" ]
