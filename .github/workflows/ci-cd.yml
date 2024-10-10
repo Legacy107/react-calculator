@@ -56,8 +56,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG
+          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:${{ env.TAG }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:${{ env.TAG }}
           cache-to: type=inline
 
   deploy:
