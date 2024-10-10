@@ -10,7 +10,7 @@ jobs:
       - name: Wait for Workflow Action
         uses: ArcticLampyrid/action-wait-for-workflow@v1.2.0
         with:
-          workflow: 'CI/CD Pipeline'
+          workflow: 'ci-cd.yml'
           branch: 'develop'
 
   e2e-test:
