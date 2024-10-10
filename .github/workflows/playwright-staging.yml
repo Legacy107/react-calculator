@@ -1,14 +1,27 @@
 name: Playwright Tests
 on:
-  workflow_run:
-    workflows: [CI/CD Pipeline]
-    types:
-      - completed
+  pull_request:
+    branches:
+      - main
 jobs:
-  test:
+  wait-for-staging-deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Workflow Action
+        uses: kamilchodola/wait-for-workflow-action@1.1.0
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+          workflow_id: 'ci-cd.yml'
+          max_wait_minutes: '10'
+          interval: '5'
+          timeout: '60'
+          org_name: ${{ github.repository_owner }}
+          repo_name: ${{ github.event.repository.name }}
+          ref: 'refs/heads/develop'
+
+  e2e-test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
