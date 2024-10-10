@@ -9,6 +9,7 @@ on:
 env:
   ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME }}
   ECS_SERVICE_NAME: ${{ github.ref == 'refs/heads/main' && secrets.ECS_SERVICE_NAME || secrets.ECS_SERVICE_NAME_DEVELOP }}
+  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/main' && 'ecs-task-definitions/prod.json' || 'ecs-task-definitions/staging.json' }}
   TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || 'staging' }}
 
 jobs:
@@ -42,16 +43,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Push Docker image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:$TAG
+          cache-to: type=inline
 
   deploy:
     runs-on: ubuntu-latest
@@ -69,6 +76,11 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           special-characters-workaround: true
 
-      - name: Deploy to AWS
-        run: |
-          aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --force-new-deployment
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          service: ${{ env.ECS_SERVICE_NAME }}
+          cluster: ${{ env.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
+          force-new-deployment: true
