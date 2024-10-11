@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - main
-      - develop
 
 env:
-  ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME }}
-  ECS_SERVICE_NAME: ${{ github.ref == 'refs/heads/main' && secrets.ECS_SERVICE_NAME || secrets.ECS_SERVICE_NAME_DEVELOP }}
-  ECS_TASK_DEFINITION: ${{ github.ref == 'refs/heads/main' && 'ecs-task-definitions/prod.json' || 'ecs-task-definitions/staging.json' }}
-  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || 'staging' }}
+  ECS_TASK_DEFINITION: 'ecs-task-definitions/prod.json'
+  ECS_TASK_DEFINITION_STAGING: 'ecs-task-definitions/staging.json'
 
 jobs:
   test:
@@ -36,7 +33,7 @@ jobs:
       - name: Run tests
         run: yarn test:ci
 
-  build_and_push:
+  staging-build_and_push:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -56,13 +53,13 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:${{ env.TAG }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:${{ env.TAG }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:staging
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:staging
           cache-to: type=inline
 
-  deploy:
+  staging-deploy:
     runs-on: ubuntu-latest
-    needs: build_and_push
+    needs: staging-build_and_push
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,7 +77,80 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          service: ${{ env.ECS_SERVICE_NAME }}
-          cluster: ${{ env.ECS_CLUSTER_NAME }}
+          service: ${{ secrets.ECS_SERVICE_NAME_DEVELOP}}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
+          force-new-deployment: true
+  
+  e2e-test:
+    timeout-minutes: 60
+    needs: staging-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install -g yarn && yarn
+      - name: Install Playwright Browsers
+        run: yarn playwright install --with-deps
+      - name: Config base URL
+        run: echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+      - name: Run Playwright tests
+        run: yarn test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  production-build_and_push:
+    runs-on: ubuntu-latest
+    needs: e2e-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/react-calculator:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/react-calculator:latest
+          cache-to: type=inline
+
+  production-deploy:
+    runs-on: ubuntu-latest
+    needs: production-build_and_push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          special-characters-workaround: true
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          service: ${{ secrets.ECS_CLUSTER_NAME }}
+          cluster: ${{ secrets.ECS_SERVICE_NAME }}
           wait-for-service-stability: true
           force-new-deployment: true
