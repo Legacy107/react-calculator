@@ -80,7 +80,7 @@ jobs:
           cluster: ${{ secrets.ECS_CLUSTER_NAME }}
           wait-for-service-stability: true
           force-new-deployment: true
-  
+
   e2e-test:
     timeout-minutes: 60
     needs: staging-deploy
