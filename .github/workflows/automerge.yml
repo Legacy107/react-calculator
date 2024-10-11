@@ -2,7 +2,7 @@ name: Enable Automerge
 on:
   pull_request:
     branches:
-    - main
+      - main
 jobs:
   Enable-Automerge:
     runs-on: ubuntu-latest
